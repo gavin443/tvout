@@ -16,6 +16,10 @@ h3.line-title span {
   margin-right: 10px;
 }
 
+.step-detail .btn:first-of-type {
+  margin-right: 10px;
+}
+
 .control-gap {
   margin-bottom: 10px;
 }

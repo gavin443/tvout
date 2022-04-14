@@ -1,6 +1,7 @@
-//above line so typescript can locate iformatcurrency code
-class BrassMaxContsCalculator {
+class TransferOutWidget {
   private maxPensionablePayInput: HTMLInputElement;
+  private nextSection: NodeListOf<Element>;
+  private pageCount: number = 0;
 
   constructor(private widgetId: string) {
     this.init();
@@ -10,11 +11,26 @@ class BrassMaxContsCalculator {
     this.maxPensionablePayInput = document.getElementById(
       `max-pensionable-pay-input-${this.widgetId}`
     ) as HTMLInputElement;
-
+    this.nextSection = document.querySelectorAll(
+      ".next-section"
+    ) as NodeListOf<Element>;
     this.setupListeners();
   }
 
   private setupListeners(): void {
-    this.maxPensionablePayInput.addEventListener("input", () => {});
+    //this.maxPensionablePayInput.addEventListener("input", () => {});
+    this.nextSection.forEach((node) => {
+      node.addEventListener("click", () => {
+        (<HTMLElement>(
+          document.querySelector("[data-tranferpage='" + this.pageCount + "']")
+        )).classList.add("d-none");
+        (<HTMLElement>(
+          document.querySelector(
+            "[data-tranferpage='" + (this.pageCount + 1) + "']"
+          )
+        )).classList.remove("d-none");
+        this.pageCount + 1;
+      });
+    });
   }
 }

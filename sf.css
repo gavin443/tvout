@@ -6,6 +6,10 @@
   margin: 10px auto;
 }
 
+.d-none {
+  display: none;
+}
+
 .btn.btn-primary {
   color: #fff;
   background-color: #035597;
