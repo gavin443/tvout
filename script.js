@@ -16,7 +16,7 @@ var TransferOutWidget = /** @class */ (function () {
             node.addEventListener("click", function () {
                 (document.querySelector("[data-tranferpage='" + _this.pageCount + "']")).classList.add("d-none");
                 (document.querySelector("[data-tranferpage='" + (_this.pageCount + 1) + "']")).classList.remove("d-none");
-                _this.pageCount + 1;
+                _this.pageCount++;
             });
         });
     };

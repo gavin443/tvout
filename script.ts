@@ -29,7 +29,7 @@ class TransferOutWidget {
             "[data-tranferpage='" + (this.pageCount + 1) + "']"
           )
         )).classList.remove("d-none");
-        this.pageCount + 1;
+        this.pageCount++;
       });
     });
   }
