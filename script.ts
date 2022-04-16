@@ -22,13 +22,20 @@ class TransferOutWidget {
     this.nextSection.forEach((node) => {
       node.addEventListener("click", () => {
         (<HTMLElement>(
-          document.querySelector("[data-tranferpage='" + this.pageCount + "']")
+          document.querySelector(`[data-tranferpage='${this.pageCount}']`)
         )).classList.add("d-none");
         (<HTMLElement>(
-          document.querySelector(
-            "[data-tranferpage='" + (this.pageCount + 1) + "']"
-          )
+          document.querySelector(`[data-tranferpage='${this.pageCount + 1}']`)
         )).classList.remove("d-none");
+
+        (<HTMLElement>(
+          document.querySelector(`[data-transferstep='${this.pageCount}']`)
+        )).classList.replace("active", "completed");
+
+        (<HTMLElement>(
+          document.querySelector(`[data-transferstep='${this.pageCount + 1}']`)
+        )).classList.add("active");
+
         this.pageCount++;
       });
     });
