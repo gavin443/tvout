@@ -1,15 +1,27 @@
 $completed-step-color: #a1cf55;
 $step-color: #a1cf55;
 $alert-color: #035597;
+$non-active-color: #d5d8ec;
 
 h3.line-title {
   border-bottom: 1px solid #dee2e6;
   line-height: 0.1em;
   margin-bottom: 30px;
+  font-size: 1.422em;
   span {
     background: #fff;
     padding: 0 10px 0 0px;
   }
+}
+
+.d-visible {
+  visibility: hidden;
+}
+
+.flex-controls {
+  align-items: flex-start;
+  justify-content: space-between;
+  line-height: 38px;
 }
 
 //for mobile steps
@@ -17,6 +29,7 @@ h3.line-title {
 
 .estimate-wrapper {
   display: flex;
+  align-items: baseline;
   label,
   input[type="radio"] {
     margin-right: 10px;
@@ -37,6 +50,7 @@ h3.line-title {
   counter-reset: step;
   display: flex;
   justify-content: center;
+  align-items: flex-start;
   padding-left: 0px;
 }
 
@@ -46,19 +60,21 @@ h3.line-title {
 .progressbar li {
   list-style-type: none;
   width: 15%;
-  font-size: 12px;
+
+  line-height: 18px;
   position: relative;
   text-align: center;
-  text-transform: uppercase;
-  //color: $step-color;
+  //transition: font-weight 0.5s;
+  counter-increment: step;
+  color: $non-active-color;
+  font-size: 0.9375rem;
+  line-height: 1.125rem;
 }
 .progressbar li:before {
   width: 30px;
   height: 30px;
-  content: "";
-  /*content: counter(step);
-    counter-increment: step;*/
-  line-height: 30px;
+  //content: "";
+  content: counter(step);
   border: 6px solid $step-color;
   display: block;
   text-align: center;
@@ -73,8 +89,7 @@ h3.line-title {
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
   content: "\f00c";
-  /*content: counter(step);
-    counter-increment: step;*/
+  //content: counter(step);
   line-height: 20px;
   border: 6px solid $completed-step-color;
   display: block;
@@ -82,6 +97,7 @@ h3.line-title {
   margin: 0 auto 10px auto;
   border-radius: 50%;
   background-color: white;
+  color: $alert-color;
 }
 
 .progressbar li:after {
@@ -97,27 +113,58 @@ h3.line-title {
 .progressbar li:first-child:after {
   content: none;
 }
-.progressbar li.completed {
-  //color: $base-step-color;
-}
-.progressbar li.completed:before,
+
+//.progressbar li.completed {
+//color: $base-step-color;
+//}
 .progressbar li.active:before {
-  border-color: $completed-step-color;
+  border-color: $step-color;
+  //color: $step-color;
+}
+
+.progressbar li.completed:before {
   color: $completed-step-color;
 }
-.progressbar li.completed + li:after {
-  background-color: $completed-step-color;
+
+// .progressbar li.completed + li:after {
+//   background-color: $completed-step-color;
+// }
+
+.progressbar li.active:after {
+  background-color: $step-color;
+}
+
+.progressbar li.completed:after {
+  background-color: $step-color;
 }
 
 .progressbar li.active {
-  font-weight: 600;
+  color: initial;
+}
+
+.step-detail .embed-responsive {
+  width: 640px;
+  height: 360px;
 }
 
 @media only screen and (max-width: 768px) {
+  .step-detail .embed-responsive {
+    width: 100%;
+    height: auto;
+  }
+
   .progressbar li {
     width: 20%;
-    font-size: 8px;
+    font-size: 12px;
   }
+
+  .progressbar li span {
+    display: none;
+  }
+}
+
+.video-wrapper iframe .vp-center {
+  justify-content: flex-start;
 }
 
 .notification-alert {
@@ -132,10 +179,10 @@ h3.line-title {
     div:first-of-type {
       border-radius: 4px 0 0 4px;
       background-color: $alert-color;
-      i {
-        padding: 16px;
-        color: #fff;
+      img {
+        margin: 8px;
         align-self: center;
+        min-width: 16px;
       }
     }
 
@@ -146,6 +193,23 @@ h3.line-title {
       border-radius: 0 4px 4px 0;
       padding: 10px;
       flex: 1 auto;
+    }
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .flex-controls {
+    align-items: flex-start;
+    justify-content: space-between;
+    line-height: 38px;
+    flex-direction: column-reverse;
+    row-gap: 5px;
+    div {
+      width: 100%;
+    }
+
+    .btn.btn-primary {
+      width: 100%;
     }
   }
 }
