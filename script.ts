@@ -1,42 +1,124 @@
 class TransferOutWidget {
-  private maxPensionablePayInput: HTMLInputElement;
-  private nextSection: NodeListOf<Element>;
-  private pageCount: number = 0;
-
+  private transferOptions: NodeListOf<HTMLInputElement>;
+  private turnSection: NodeListOf<Element>;
+  private pageCount: number;
   constructor(private widgetId: string) {
     this.init();
+    this.pageCount = 0;
   }
 
   private init(): void {
-    this.maxPensionablePayInput = document.getElementById(
-      `max-pensionable-pay-input-${this.widgetId}`
-    ) as HTMLInputElement;
-    this.nextSection = document.querySelectorAll(
-      ".next-section"
+    this.transferOptions = document.querySelectorAll(
+      'input[name="transfer-option"], input[name^="request-"]'
+    ) as NodeListOf<HTMLInputElement>;
+
+    this.turnSection = document.querySelectorAll(
+      ".next-section,.prev-section"
     ) as NodeListOf<Element>;
     this.setupListeners();
   }
 
+  private validateOptions(): void {
+    const isTrue: boolean =
+      document.querySelector<HTMLInputElement>(
+        `[data-transferpage='${this.pageCount}'] input[name^="request-"]:checked`
+      ).value == "Yes";
+
+    const isRequestChecked =
+      document.querySelectorAll(
+        `[data-transferpage='${this.pageCount}'] input[name^="request-"]:checked`
+      ).length > 0;
+
+    const isTransferChecked =
+      document.querySelectorAll(
+        `[data-transferpage='${this.pageCount}'] input[name^="transfer-option"]:checked`
+      ).length > 0;
+
+    const stepText = document.querySelector<HTMLInputElement>(
+      `[data-transferpage='${this.pageCount}'] .step-text`
+    );
+
+    if (stepText) stepText.classList.toggle("d-none", isTrue);
+
+    switch (this.pageCount) {
+      case 0:
+        document
+          .querySelector<HTMLInputElement>(
+            `[data-transferbtn='${this.pageCount}'].request`
+          )
+          ?.classList.toggle("d-none", isTrue);
+
+        document
+          .querySelector<HTMLInputElement>(
+            `[data-transferbtn='${this.pageCount}'].next-section`
+          )
+          ?.classList.toggle("d-none", !isTrue);
+        break;
+      case 3:
+        document
+          .querySelector<HTMLInputElement>(
+            `[data-transferpage='${this.pageCount}'] .read-more`
+          )
+          ?.classList.toggle("d-none", isTrue);
+        document
+          .querySelector<HTMLInputElement>(
+            `[data-transferbtn='${this.pageCount}'].next-section`
+          )
+          ?.classList.toggle("d-none", !(isTransferChecked && isTrue));
+        document
+          .querySelector<HTMLInputElement>(
+            `[data-transferpage='${this.pageCount}'] .step-text`
+          )
+          ?.classList.toggle("d-none", !isTrue);
+        break;
+      default:
+        document
+          .querySelector<HTMLInputElement>(
+            `[data-transferbtn='${this.pageCount}'].next-section`
+          )
+          ?.classList.toggle("d-none", !isRequestChecked);
+        break;
+    }
+  }
+
   private setupListeners(): void {
-    //this.maxPensionablePayInput.addEventListener("input", () => {});
-    this.nextSection.forEach((node) => {
+    this.transferOptions.forEach((node) => {
       node.addEventListener("click", () => {
-        (<HTMLElement>(
-          document.querySelector(`[data-tranferpage='${this.pageCount}']`)
-        )).classList.add("d-none");
-        (<HTMLElement>(
-          document.querySelector(`[data-tranferpage='${this.pageCount + 1}']`)
-        )).classList.remove("d-none");
+        this.validateOptions();
+      });
+    });
 
-        (<HTMLElement>(
-          document.querySelector(`[data-transferstep='${this.pageCount}']`)
-        )).classList.replace("active", "completed");
-
-        (<HTMLElement>(
-          document.querySelector(`[data-transferstep='${this.pageCount + 1}']`)
-        )).classList.add("active");
-
-        this.pageCount++;
+    this.turnSection.forEach((node) => {
+      node.addEventListener("click", (e) => {
+        document
+          .querySelector<HTMLElement>(`[data-transferpage='${this.pageCount}']`)
+          .classList.add("d-none");
+        if ((<Element>e.target).matches(".prev-section")) {
+          document
+            .querySelector<HTMLElement>(
+              `[data-transferstep='${this.pageCount}']`
+            )
+            .classList.remove("active");
+          this.pageCount--;
+          document
+            .querySelector<HTMLElement>(
+              `[data-transferstep='${this.pageCount}']`
+            )
+            .classList.replace("completed", "active");
+        } else {
+          document
+            .querySelector<HTMLElement>(
+              `[data-transferstep='${this.pageCount}']`
+            )
+            .classList.replace("active", "completed");
+          this.pageCount++;
+        }
+        document
+          .querySelector<HTMLElement>(`[data-transferstep='${this.pageCount}']`)
+          .classList?.add("active");
+        document
+          .querySelector<HTMLElement>(`[data-transferpage='${this.pageCount}']`)
+          ?.classList.remove("d-none");
       });
     });
   }
